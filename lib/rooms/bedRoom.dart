@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class LivingRoom extends StatefulWidget {
-  LivingRoom({super.key});
+class Bedroom extends StatefulWidget {
+  const Bedroom({super.key});
 
   @override
-  State<LivingRoom> createState() => _LivingRoomState();
+  State<Bedroom> createState() => _BedroomState();
 }
 
-class _LivingRoomState extends State<LivingRoom> {
+class _BedroomState extends State<Bedroom> {
+  String doorStatus = 'Closed';
+
+  String doorToggle = 'Open';
+
   String lightStatus = 'Off';
 
   String lightToggle = 'On';
@@ -24,7 +29,7 @@ class _LivingRoomState extends State<LivingRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Living Room'),
+        title: const Text('Bedroom'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
@@ -36,6 +41,29 @@ class _LivingRoomState extends State<LivingRoom> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Door is $doorStatus',
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (doorStatus == 'Closed') {
+                        doorStatus = 'Open';
+                        doorToggle = 'Close';
+                      } else {
+                        doorStatus = 'Closed';
+                        doorToggle = 'Open';
+                      }
+                    });
+                  },
+                  child: Text(doorToggle),
+                )
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

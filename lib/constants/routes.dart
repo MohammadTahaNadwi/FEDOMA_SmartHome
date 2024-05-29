@@ -3,4 +3,5 @@ const settingsRoute = '/settings/';
 
 //Rooms
 const livingRoomRoute = '/livingRoom/';
-const mainDoorRoute = '/mainDoor/';
+const outsideRoute = '/outside/';
+const bedroomRoute = '/bedroom/';
