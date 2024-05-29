@@ -11,7 +11,10 @@ class NavBar extends StatelessWidget {
       child: ListView(
         children: [
           const UserAccountsDrawerHeader(
-            accountName: Text('FEDOMA'),
+            accountName: Text(
+              'FEDOMA ',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+            ),
             accountEmail: Text('mtnmtn9th@gmail.com'),
           ),
           ListTile(
@@ -22,9 +25,13 @@ class NavBar extends StatelessWidget {
                   .pushNamedAndRemoveUntil(homeRoute, (route) => false);
             },
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(settingsRoute, (route) => false);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.analytics),
