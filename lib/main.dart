@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:smarthome/rooms/bedRoom.dart';
 import 'package:smarthome/rooms/livingRoom.dart';
 import 'package:smarthome/rooms/outside.dart';
+import 'package:smarthome/views/analytics.dart';
+import 'package:smarthome/views/doorbell.dart';
+import 'package:smarthome/views/helpPage.dart';
 import 'package:smarthome/views/settings.dart';
 import 'package:smarthome/views/navbar.dart';
 
@@ -17,7 +20,10 @@ void main() {
         settingsRoute: (context) => const Settings(),
         livingRoomRoute: (context) => LivingRoom(),
         outsideRoute: (context) => Outside(),
-        bedroomRoute: (context) => Bedroom(),
+        bedroomRoute: (context) => const Bedroom(),
+        doorbellRoute: (context) => Doorbell(),
+        helpPageRoute: (context) => const HelpPage(),
+        analyticsRoute: (context) => Analytics(),
       },
     ),
   );
@@ -39,13 +45,29 @@ class _MainAppState extends State<MainApp> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: const Text('My Home'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(doorbellRoute);
+            },
+            icon: Icon(Icons.doorbell),
+            tooltip: "Doorbell",
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(helpPageRoute);
+            },
+            icon: Icon(Icons.help),
+            tooltip: "Help",
+          )
+        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               decoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(10),
@@ -59,8 +81,7 @@ class _MainAppState extends State<MainApp> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Ink.image(
-                      image: const NetworkImage(
-                          'https://s3media.angieslist.com/s3fs-public/blue-front-door-concrete-floor.jpeg?impolicy=leadImage'),
+                      image: const AssetImage('assets/images/MainDoor.jpg'),
                       height: 200,
                       fit: BoxFit.fill,
                     ),
@@ -80,8 +101,8 @@ class _MainAppState extends State<MainApp> {
             children: [
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(10)),
@@ -117,8 +138,8 @@ class _MainAppState extends State<MainApp> {
             children: [
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(10)),

@@ -26,21 +26,32 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.doorbell_rounded),
+            title: const Text('Doorbell'),
+            onTap: () {
+              Navigator.of(context).pushNamed(doorbellRoute);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(settingsRoute, (route) => false);
+              Navigator.of(context).pushNamed(settingsRoute);
             },
           ),
           ListTile(
             leading: const Icon(Icons.analytics),
             title: const Text('Analytics'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(analyticsRoute);
+            },
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.help),
             title: Text('Help'),
+            onTap: () {
+              Navigator.of(context).pushNamed(helpPageRoute);
+            },
           )
         ],
       ),
