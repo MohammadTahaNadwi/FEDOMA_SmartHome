@@ -8,3 +8,8 @@ const analyticsRoute = '/analytics/';
 const livingRoomRoute = '/livingRoom/';
 const outsideRoute = '/outside/';
 const bedroomRoute = '/bedroom/';
+
+//User
+const loginRoute = '/login/';
+const registerRoute = '/register/';
+const verifyEmailRoute = 'verifyEmail';
