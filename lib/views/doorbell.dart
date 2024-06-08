@@ -1,5 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smarthome/views/pop_up_messages.dart';
 
 class Doorbell extends StatefulWidget {
   const Doorbell({super.key});
@@ -13,6 +15,7 @@ class _DoorbellState extends State<Doorbell> {
 
   @override
   Widget build(BuildContext context) {
+    final doorbellDB = FirebaseDatabase.instance.ref('Doorbell/');
     return Scaffold(
         appBar: AppBar(
           title: const Text('Doorbell'),
@@ -30,10 +33,23 @@ class _DoorbellState extends State<Doorbell> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    timeNow,
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          await doorbellDB.set({
+                            'Answered': 0,
+                            'Date': DateFormat("dd-MM-yyyy")
+                                .format(DateTime.now())
+                                .toString(),
+                            'Time': DateFormat("HH:mm:ss")
+                                .format(DateTime.now())
+                                .toString(),
+                          });
+                        } catch (e) {
+                          showErrorDialog(context, e.toString());
+                        }
+                      },
+                      child: const Text('Press the doorbell'))
                 ],
               ),
             ],

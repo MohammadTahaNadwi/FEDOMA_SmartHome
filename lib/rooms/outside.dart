@@ -1,5 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smarthome/views/pop_up_messages.dart';
 
 class Outside extends StatefulWidget {
   Outside({super.key});
@@ -19,6 +21,7 @@ class _OutsideState extends State<Outside> {
 
   @override
   Widget build(BuildContext context) {
+    final outsideHome = FirebaseDatabase.instance.ref('Rooms/Outside');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Outside'),
@@ -42,13 +45,19 @@ class _OutsideState extends State<Outside> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      if (doorStatus == 'Closed') {
-                        doorStatus = 'Open';
-                        doorToggle = 'Close';
-                      } else {
-                        doorStatus = 'Closed';
-                        doorToggle = 'Open';
+                    setState(() async {
+                      try {
+                        if (doorStatus == 'Closed') {
+                          await outsideHome.set({'Door': 1});
+                          doorStatus = 'Open';
+                          doorToggle = 'Close';
+                        } else {
+                          await outsideHome.set({'Door': 0});
+                          doorStatus = 'Closed';
+                          doorToggle = 'Open';
+                        }
+                      } catch (e) {
+                        showErrorDialog(context, e.toString());
                       }
                     });
                   },
