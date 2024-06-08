@@ -1,7 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/views/navbar.dart';
+import 'dart:developer' as devtools show log;
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -10,11 +13,35 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+final dbRef = FirebaseDatabase.instance.ref();
+
+List rooms = [];
+bool isLoaded = false;
+
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    runListener();
+  }
+
+  void runListener() {
+    dbRef.child('Rooms/').onValue.listen((event) {
+      List temp = [];
+      for (var element in event.snapshot.children.indexed) {
+        temp.add(element.$2.key.toString());
+      }
+      setState(() {
+        rooms = temp;
+        isLoaded = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavBar(),
+      drawer: const NavBar(),
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -24,129 +51,39 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.of(context).pushNamed(doorbellRoute);
             },
-            icon: Icon(Icons.doorbell),
+            icon: const Icon(Icons.doorbell),
             tooltip: "Doorbell",
           ),
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(helpPageRoute);
             },
-            icon: Icon(Icons.help),
+            icon: const Icon(Icons.help),
             tooltip: "Help",
           )
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: InkWell(
-                splashColor: Colors.black,
-                onTap: () {
-                  Navigator.of(context).pushNamed(outsideRoute);
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Ink.image(
-                      image: const AssetImage('assets/images/MainDoor.jpg'),
-                      height: 200,
-                      fit: BoxFit.fill,
+      body: isLoaded
+          ? ListView.builder(
+              itemCount: rooms.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListTile(
+                    shape: const RoundedRectangleBorder(
+                        side: BorderSide(width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    title: Text(
+                      rooms[index],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
                     ),
-                    const Text(
-                      'Outside',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.blueGrey),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: InkWell(
-                    splashColor: Colors.black,
-                    onTap: () {
-                      Navigator.of(context).pushNamed(livingRoomRoute);
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Ink.image(
-                          image: const NetworkImage(
-                              'https://images.pexels.com/photos/3209045/pexels-photo-3209045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
-                          height: 200,
-                          fit: BoxFit.fill,
-                        ),
-                        const Text(
-                          'Living Room',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blueGrey),
-                        ),
-                      ],
-                    ),
+                    onTap: () {},
                   ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: InkWell(
-                    splashColor: Colors.black,
-                    onTap: () {
-                      Navigator.of(context).pushNamed(bedroomRoute);
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Ink.image(
-                          image: const NetworkImage(
-                              'https://images.pexels.com/photos/90317/pexels-photo-90317.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
-                          height: 200,
-                          fit: BoxFit.fill,
-                        ),
-                        const Text(
-                          'Bedroom',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blueGrey),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+                );
+              },
+            )
+          : const Text('No rooms found'),
     );
   }
 }
