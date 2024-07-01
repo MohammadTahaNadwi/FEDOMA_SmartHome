@@ -14,25 +14,28 @@ import 'package:smarthome/views/analytics.dart';
 import 'package:smarthome/views/doorbell.dart';
 import 'package:smarthome/views/helpPage.dart';
 import 'package:smarthome/views/homePage.dart';
+import 'package:smarthome/views/splashView.dart';
+import 'package:smarthome/views/universal_room.dart';
 import 'package:smarthome/views/settings.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      home: InitializeSmarthome(),
+      home: SplashView(),
       debugShowCheckedModeBanner: false,
       routes: {
         homeRoute: (context) => HomePage(),
         settingsRoute: (context) => const Settings(),
-        livingRoomRoute: (context) => LivingRoom(),
-        outsideRoute: (context) => Outside(),
-        bedroomRoute: (context) => const Bedroom(),
+        roomPageRoute: (context) => UniversalRoom(
+              roomName: ModalRoute.of(context)!.settings.arguments
+                  as String, // Access arguments
+            ),
         doorbellRoute: (context) => Doorbell(),
         helpPageRoute: (context) => const HelpPage(),
         analyticsRoute: (context) => Analytics(),
         loginRoute: (context) => LoginView(),
         registerRoute: (context) => RegisterView(),
-        verifyEmailRoute: (context) => EmailVerifier()
+        verifyEmailRoute: (context) => EmailVerifier(),
       },
     ),
   );

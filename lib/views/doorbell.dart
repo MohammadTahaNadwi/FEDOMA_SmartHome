@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smarthome/views/pop_up_messages.dart';
+import 'package:smarthome/views/pop_up_screens.dart';
 
 class Doorbell extends StatefulWidget {
   const Doorbell({super.key});
@@ -36,7 +36,7 @@ class _DoorbellState extends State<Doorbell> {
                   ElevatedButton(
                       onPressed: () async {
                         try {
-                          await doorbellDB.set({
+                          await doorbellDB.push().set({
                             'Answered': 0,
                             'Date': DateFormat("dd-MM-yyyy")
                                 .format(DateTime.now())

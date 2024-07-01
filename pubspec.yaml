@@ -26,6 +26,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/Sounds/
+    - assets/icon/App_logo.webp
     - assets/images/MainDoor.jpg
 
 flutter_icons:

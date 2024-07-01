@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:smarthome/views/pop_up_messages.dart';
+import 'package:smarthome/views/pop_up_screens.dart';
 
 class Outside extends StatefulWidget {
   Outside({super.key});

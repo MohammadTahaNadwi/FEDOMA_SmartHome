@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/constants/routes.dart';
-import 'package:smarthome/views/pop_up_messages.dart';
+import 'package:smarthome/views/pop_up_screens.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -52,6 +52,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           TextButton(
             onPressed: () async {
+              
               final email = _email.text;
               final password = _password.text;
               try {
@@ -97,6 +98,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+
 String getUserEmail() {
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null) {

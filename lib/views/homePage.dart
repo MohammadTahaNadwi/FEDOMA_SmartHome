@@ -1,24 +1,27 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/views/navbar.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:smarthome/views/pop_up_screens.dart';
+
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-final dbRef = FirebaseDatabase.instance.ref();
-
-List rooms = [];
-bool isLoaded = false;
-
 class _HomePageState extends State<HomePage> {
+  final dbRef = FirebaseDatabase.instance.ref();
+  late StreamSubscription _roomListener;
+  List rooms = [];
+  bool isLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void runListener() {
-    dbRef.child('Rooms/').onValue.listen((event) {
+    _roomListener = dbRef.child('Rooms').onValue.listen((event) {
       List temp = [];
       for (var element in event.snapshot.children.indexed) {
         temp.add(element.$2.key.toString());
@@ -43,16 +46,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: const NavBar(),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromRGBO(10, 29, 77, 1),
         foregroundColor: Colors.white,
         title: const Text('My Home'),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(doorbellRoute);
+            onPressed: () async {
+              await addRoom(context);
             },
-            icon: const Icon(Icons.doorbell),
-            tooltip: "Doorbell",
+            icon: const Icon(Icons.add),
+            tooltip: "Add a room",
           ),
           IconButton(
             onPressed: () {
@@ -78,12 +81,21 @@ class _HomePageState extends State<HomePage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(roomPageRoute, arguments: rooms[index]);
+                    },
                   ),
                 );
               },
             )
-          : const Text('No rooms found'),
+          : const Center(child: CircularProgressIndicator()),
     );
+  }
+
+  @override
+  void deactivate() {
+    _roomListener.cancel();
+    super.deactivate();
   }
 }

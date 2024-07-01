@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:smarthome/user/login.dart';
-import 'package:smarthome/views/pop_up_messages.dart';
+import 'package:smarthome/views/pop_up_screens.dart';
 import 'dart:developer' as devtools show log;
 
 class NavBar extends StatefulWidget {
@@ -20,6 +20,7 @@ class _NavBarState extends State<NavBar> {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
+            decoration: BoxDecoration(color: Color.fromRGBO(10, 29, 77, 1)),
             accountName: const Text(
               'FEDOMA ',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
@@ -44,8 +45,8 @@ class _NavBarState extends State<NavBar> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
             onTap: () {
               Navigator.of(context).pushNamed(settingsRoute);
             },
@@ -58,15 +59,15 @@ class _NavBarState extends State<NavBar> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.help),
-            title: Text('Help'),
+            leading: const Icon(Icons.help),
+            title: const Text('Help'),
             onTap: () {
               Navigator.of(context).pushNamed(helpPageRoute);
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: Text('Logout'),
+            title: const Text('Logout'),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.of(context)
