@@ -21,9 +21,8 @@ class UniversalRoom extends StatefulWidget {
 class _UniversalRoomState extends State<UniversalRoom> {
   late final roomPath = "Rooms/${widget.roomName}";
   late final roomDetailsRef = FirebaseDatabase.instance.ref();
-  List possibleActions = ["Door", "Windows", "Curtains", "Lights"];
-  List allowedActions = [];
   List roomDetails = [];
+  List roomActionValues = [];
   bool isLoaded = false;
   late StreamSubscription roomDetailsListener;
 
@@ -42,48 +41,21 @@ class _UniversalRoomState extends State<UniversalRoom> {
       roomDetailsListener =
           roomDetailsRef.child(roomPath).onValue.listen((event) {
         List temp = [];
+        List tempRoomActionValues = [];
         for (var element in event.snapshot.children) {
           temp.add(element.key.toString());
+          tempRoomActionValues.add(element.value.toString());
         }
-        for (int count = 0; count < 4; count++) {
-          if (!temp.contains(possibleActions[count])) {
-            allowedActions.add(possibleActions[count]);
-          }
-        }
-        devtools.log(allowedActions.toString());
+
         setState(() {
           roomDetails = temp;
+          roomActionValues = tempRoomActionValues;
           isLoaded = true;
         });
       });
     } catch (e) {
       showErrorDialog(context, e.toString());
     }
-  }
-
-  Future addRoomAction(BuildContext context, String room) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: const Text("Add action item"),
-              content: SizedBox(
-                height: 300,
-                child: ListView.builder(
-                    itemCount: allowedActions.length,
-                    itemBuilder: ((context, index) {
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ListTile(
-                          title: Text(allowedActions[index]),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    })),
-              ));
-        });
   }
 
   @override
@@ -94,12 +66,6 @@ class _UniversalRoomState extends State<UniversalRoom> {
         foregroundColor: Colors.white,
         title: Text(widget.roomName),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              addRoomAction(context, widget.roomName);
-            },
-          ),
           IconButton(onPressed: () {}, icon: Icon(Icons.help)),
         ],
       ),
@@ -110,20 +76,41 @@ class _UniversalRoomState extends State<UniversalRoom> {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ListTile(
-                    shape: const RoundedRectangleBorder(
-                        side: BorderSide(width: 1),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    title: Text(
-                      roomDetails[index],
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 20),
+                    title: Container(
+                      color: Color.fromRGBO(10, 29, 77, 1),
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              roomDetails[index],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
+                            ),
+                            Text(
+                              "Status: " + roomActionValues[index],
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Tap to Close",
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        )
+                      ]),
                     ),
                     onTap: () {},
                   ),
                 );
               },
             )
-          : const Text('No actions found'),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 

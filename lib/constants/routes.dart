@@ -1,10 +1,9 @@
 //views
 const appInitializer = '/initializeSmarthome/';
 const homeRoute = '/home/';
-const settingsRoute = '/settings/';
 const doorbellRoute = '/doorbell/';
 const helpPageRoute = '/helpPage/';
-const analyticsRoute = '/analytics/';
+const reportsRoute = '/reports/';
 
 //Rooms
 const roomPageRoute = '/universalRoom/';

@@ -29,7 +29,7 @@ Future<void> analyticsViewAuthentication(BuildContext context) async {
             onPressed: () {
               if (pwd.text == 'admin') {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil(analyticsRoute, (route) => false);
+                    .pushNamedAndRemoveUntil(reportsRoute, (route) => false);
               }
             },
             child: const Text('Submit'),
@@ -60,37 +60,4 @@ Future<void> showErrorDialog(
       );
     },
   );
-}
-
-Future<void> addRoom(BuildContext context) {
-  late TextEditingController roomName = TextEditingController();
-
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Add a Room"),
-          content: TextField(
-            autofocus: true,
-            decoration:
-                const InputDecoration(hintText: "Enter room name here..."),
-            controller: roomName,
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel')),
-            TextButton(
-              onPressed: () async {
-                final dbReference = FirebaseDatabase.instance.ref('Rooms/');
-                await dbReference.update({roomName.text: ""});
-                Navigator.of(context).pop();
-              },
-              child: const Text('Add Room'),
-            )
-          ],
-        );
-      });
 }

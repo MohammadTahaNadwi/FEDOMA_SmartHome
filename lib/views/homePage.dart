@@ -51,13 +51,6 @@ class _HomePageState extends State<HomePage> {
         title: const Text('My Home'),
         actions: [
           IconButton(
-            onPressed: () async {
-              await addRoom(context);
-            },
-            icon: const Icon(Icons.add),
-            tooltip: "Add a room",
-          ),
-          IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(helpPageRoute);
             },

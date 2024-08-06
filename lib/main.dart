@@ -1,22 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/widgets.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/firebase_options.dart';
-import 'package:smarthome/rooms/bedRoom.dart';
-import 'package:smarthome/rooms/livingRoom.dart';
-import 'package:smarthome/rooms/outside.dart';
 import 'package:smarthome/user/emailVerifier.dart';
 import 'package:smarthome/user/login.dart';
 import 'package:smarthome/user/register.dart';
-import 'package:smarthome/views/analytics.dart';
+import 'package:smarthome/views/reports.dart';
 import 'package:smarthome/views/doorbell.dart';
 import 'package:smarthome/views/helpPage.dart';
 import 'package:smarthome/views/homePage.dart';
 import 'package:smarthome/views/splashView.dart';
 import 'package:smarthome/views/universal_room.dart';
-import 'package:smarthome/views/settings.dart';
 
 void main() {
   runApp(
@@ -25,14 +20,13 @@ void main() {
       debugShowCheckedModeBanner: false,
       routes: {
         homeRoute: (context) => HomePage(),
-        settingsRoute: (context) => const Settings(),
         roomPageRoute: (context) => UniversalRoom(
               roomName: ModalRoute.of(context)!.settings.arguments
                   as String, // Access arguments
             ),
         doorbellRoute: (context) => Doorbell(),
         helpPageRoute: (context) => const HelpPage(),
-        analyticsRoute: (context) => Analytics(),
+        reportsRoute: (context) => Reports(),
         loginRoute: (context) => LoginView(),
         registerRoute: (context) => RegisterView(),
         verifyEmailRoute: (context) => EmailVerifier(),

@@ -45,15 +45,8 @@ class _NavBarState extends State<NavBar> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap: () {
-              Navigator.of(context).pushNamed(settingsRoute);
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.analytics),
-            title: const Text('Analytics'),
+            title: const Text('Reports'),
             onTap: () async {
               await analyticsViewAuthentication(context);
             },
