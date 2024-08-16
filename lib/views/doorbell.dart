@@ -19,14 +19,11 @@ class _DoorbellState extends State<Doorbell> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Doorbell'),
-          backgroundColor: Colors.black,
+          backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
           foregroundColor: Colors.white,
         ),
         body: Container(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          decoration: const BoxDecoration(
-            color: Colors.blueGrey,
-          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

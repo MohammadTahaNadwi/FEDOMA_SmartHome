@@ -34,60 +34,89 @@ class _RegisterViewState extends State<RegisterView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
+        foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          TextField(
-            keyboardType: TextInputType.emailAddress,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration:
-                const InputDecoration(hintText: 'Enter your email here!'),
-            controller: _email,
-          ),
-          TextField(
-            decoration: const InputDecoration(hintText: 'Enter password here'),
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            controller: _password,
-          ),
-          TextButton(
-            onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
-              try {
-                final userCredential =
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                  email: email,
-                  password: password,
-                );
-                final user = userCredential.user;
-                await user?.sendEmailVerification();
-                Navigator.of(context).pushNamed(verifyEmailRoute);
-              } on FirebaseAuthException catch (e) {
-                if (e.code == "weak-password") {
-                  await showErrorDialog(context, 'Error : Weak password');
-                } else if (e.code == "email-already-in-use") {
-                  await showErrorDialog(
-                      context, 'Error : Email already in use');
-                } else {
-                  await showErrorDialog(context, 'Error : ${e.code}');
+      body: Container(
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/icon/App_logo.webp",
+              width: 100,
+              fit: BoxFit.fill,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            TextField(
+              keyboardType: TextInputType.emailAddress,
+              enableSuggestions: false,
+              autocorrect: false,
+              autofocus: true,
+              decoration: const InputDecoration(hintText: 'Enter email here'),
+              controller: _email,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              decoration:
+                  const InputDecoration(hintText: 'Enter password here'),
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              controller: _password,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                      const Color.fromRGBO(10, 29, 77, 1))),
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  final userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  );
+                  final user = userCredential.user;
+                  await user?.sendEmailVerification();
+                  Navigator.of(context).pushNamed(verifyEmailRoute);
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "weak-password") {
+                    await showErrorDialog(context, 'Error : Weak password');
+                  } else if (e.code == "email-already-in-use") {
+                    await showErrorDialog(
+                        context, 'Error : Email already in use');
+                  } else {
+                    await showErrorDialog(context, 'Error : ${e.code}');
+                  }
+                } catch (e) {
+                  await showErrorDialog(context, 'Error : ${e.toString()}');
                 }
-              } catch (e) {
-                await showErrorDialog(context, 'Error : ${e.toString()}');
-              }
-            },
-            child: const Text('Register'),
-          ),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
               },
-              child: const Text('Already registered? Login here'))
-        ],
+              child: const Text(
+                'Register',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                },
+                child: const Text(
+                  'Already registered? Login here',
+                  style: TextStyle(color: const Color.fromRGBO(10, 29, 77, 1)),
+                ))
+          ],
+        ),
       ),
     );
   }

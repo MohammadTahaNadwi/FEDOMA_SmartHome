@@ -28,8 +28,7 @@ Future<void> analyticsViewAuthentication(BuildContext context) async {
           TextButton(
             onPressed: () {
               if (pwd.text == 'admin') {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(reportsRoute, (route) => false);
+                Navigator.of(context).pushNamed(reportsRoute);
               }
             },
             child: const Text('Submit'),

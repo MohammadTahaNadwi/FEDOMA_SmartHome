@@ -32,68 +32,101 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
       ),
-      body: Column(
-        children: [
-          TextField(
-            keyboardType: TextInputType.emailAddress,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(hintText: 'Enter email here'),
-            controller: _email,
-          ),
-          TextField(
-            decoration: const InputDecoration(hintText: 'Enter password here'),
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            controller: _password,
-          ),
-          TextButton(
-            onPressed: () async {
-              
-              final email = _email.text;
-              final password = _password.text;
-              try {
-                await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: email,
-                  password: password,
-                );
-                final user = FirebaseAuth.instance.currentUser;
-                if (user?.emailVerified ?? false) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    homeRoute,
-                    (route) => false,
+      body: Container(
+        margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/icon/App_logo.webp",
+              width: 100,
+              fit: BoxFit.fill,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextField(
+              keyboardType: TextInputType.emailAddress,
+              enableSuggestions: false,
+              autocorrect: false,
+              autofocus: true,
+              decoration: const InputDecoration(
+                  hintText: 'Enter email here', focusColor: Colors.white),
+              controller: _email,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Enter password here',
+              ),
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              controller: _password,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(
+                      Color.fromRGBO(10, 29, 77, 1))),
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email,
+                    password: password,
                   );
-                } else {
-                  user?.sendEmailVerification();
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    verifyEmailRoute,
-                    (route) => false,
-                  );
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user?.emailVerified ?? false) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      homeRoute,
+                      (route) => false,
+                    );
+                  } else {
+                    user?.sendEmailVerification();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      verifyEmailRoute,
+                      (route) => false,
+                    );
+                  }
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'invalid-email') {
+                    await showErrorDialog(context, "Invalid Email Address");
+                  } else if (e.code == 'invalid-credential') {
+                    await showErrorDialog(
+                        context, "Incorrect login credentials");
+                  } else {
+                    await showErrorDialog(context, "Error : ${e.code}");
+                  }
+                } catch (e) {
+                  await showErrorDialog(context, 'Error : ${e.toString()}');
                 }
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'invalid-email') {
-                  await showErrorDialog(context, "Invalid Email Address");
-                } else if (e.code == 'invalid-credential') {
-                  await showErrorDialog(context, "Incorrect login credentials");
-                } else {
-                  await showErrorDialog(context, "Error : ${e.code}");
-                }
-              } catch (e) {
-                await showErrorDialog(context, 'Error : ${e.toString()}');
-              }
-            },
-            child: const Text('Login'),
-          ),
-          TextButton(
+              },
+              child: const Text(
+                'Login',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextButton(
               onPressed: () {
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
-              child: Text("Not registered yet? Register here!"))
-        ],
+              child: const Text("Not registered yet? Register here!",
+                  style: TextStyle(color: Color.fromRGBO(10, 29, 77, 1))),
+            )
+          ],
+        ),
       ),
     );
   }

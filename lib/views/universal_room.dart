@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -80,32 +81,59 @@ class _UniversalRoomState extends State<UniversalRoom> {
                       color: Color.fromRGBO(10, 29, 77, 1),
                       child: Column(children: [
                         Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                roomDetails[index],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 24, color: Colors.white),
+                              ),
+                            ]),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              roomDetails[index],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.white),
-                            ),
-                            Text(
                               "Status: " + roomActionValues[index],
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ],
                         ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "Tap to Close",
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
-                        )
+                        roomActionValues[index] == "Open"
+                            ? const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    "Tap to Close",
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 15),
+                                  )
+                                ],
+                              )
+                            : const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    "Tap to Open",
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 15),
+                                  )
+                                ],
+                              )
                       ]),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      late final currentAction = FirebaseDatabase.instance
+                          .ref(roomPath + "/" + roomDetails[index]);
+                      if (roomActionValues[index] == "Open") {
+                        currentAction.set("Closed");
+                      } else {
+                        currentAction.set("Open");
+                      }
+                    },
                   ),
                 );
               },

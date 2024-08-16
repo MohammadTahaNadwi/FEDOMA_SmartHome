@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:smarthome/user/login.dart';
@@ -20,10 +19,21 @@ class _NavBarState extends State<NavBar> {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: Color.fromRGBO(10, 29, 77, 1)),
-            accountName: const Text(
-              'FEDOMA ',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+            currentAccountPicture: const CircleAvatar(
+              backgroundImage: AssetImage("assets/icon/App_logo.webp"),
+            ),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(10, 29, 77, 1),
+            ),
+            accountName: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+              child: Text(
+                'FEDOMA ',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
             accountEmail: Text(userEmail),
           ),
@@ -42,6 +52,13 @@ class _NavBarState extends State<NavBar> {
             title: const Text('Doorbell'),
             onTap: () {
               Navigator.of(context).pushNamed(doorbellRoute);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.broken_image),
+            title: const Text("Intrusions"),
+            onTap: () {
+              Navigator.of(context).pushNamed(intrusionsRoute);
             },
           ),
           ListTile(

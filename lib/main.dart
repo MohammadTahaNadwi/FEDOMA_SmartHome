@@ -6,6 +6,7 @@ import 'package:smarthome/firebase_options.dart';
 import 'package:smarthome/user/emailVerifier.dart';
 import 'package:smarthome/user/login.dart';
 import 'package:smarthome/user/register.dart';
+import 'package:smarthome/views/intrusions.dart';
 import 'package:smarthome/views/reports.dart';
 import 'package:smarthome/views/doorbell.dart';
 import 'package:smarthome/views/helpPage.dart';
@@ -30,6 +31,7 @@ void main() {
         loginRoute: (context) => LoginView(),
         registerRoute: (context) => RegisterView(),
         verifyEmailRoute: (context) => EmailVerifier(),
+        intrusionsRoute: (context) => Intrusions(),
       },
     ),
   );
@@ -58,7 +60,7 @@ class InitializeSmarthome extends StatelessWidget {
               return LoginView();
             }
           } else {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

@@ -27,7 +27,7 @@ flutter:
   assets:
     - assets/Sounds/
     - assets/icon/App_logo.webp
-    - assets/images/MainDoor.jpg
+    - assets/images/
 
 flutter_icons:
   android: true

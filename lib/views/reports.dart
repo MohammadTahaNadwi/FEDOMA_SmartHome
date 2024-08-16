@@ -8,8 +8,8 @@ class Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analytics'),
-        backgroundColor: Colors.black,
+        title: const Text('Analytical Reports'),
+        backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
         foregroundColor: Colors.white,
       ),
       body: const Stack(

@@ -4,6 +4,7 @@ const homeRoute = '/home/';
 const doorbellRoute = '/doorbell/';
 const helpPageRoute = '/helpPage/';
 const reportsRoute = '/reports/';
+const intrusionsRoute = '/intrusions/';
 
 //Rooms
 const roomPageRoute = '/universalRoom/';

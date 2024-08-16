@@ -15,28 +15,34 @@ class _EmailVerifierState extends State<EmailVerifier> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify Email'),
+        backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
+        foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          const Text(
-              "We've sent you an email verification. Please open it to verify your account."),
-          const Text(
-              "If you have't received a verification email yet, press the button below  "),
-          TextButton(
-              onPressed: () async {
-                final user = FirebaseAuth.instance.currentUser;
-                await user
-                    ?.sendEmailVerification(ActionCodeSettings(url: homeRoute));
-              },
-              child: const Text('Send email verification')),
-          TextButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
-              },
-              child: const Text("Not logged in? Click here to login"))
-        ],
+      body: Container(
+        margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+                "We've sent you an email verification. Please open it to verify your account."),
+            const Text(
+                "If you have't received a verification email yet, press the button below  "),
+            TextButton(
+                onPressed: () async {
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification(
+                      ActionCodeSettings(url: homeRoute));
+                },
+                child: const Text('Send email verification')),
+            TextButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                },
+                child: const Text("Not logged in? Click here to login"))
+          ],
+        ),
       ),
     );
   }
