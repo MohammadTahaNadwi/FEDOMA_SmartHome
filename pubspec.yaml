@@ -1,0 +1,39 @@
+name: smarthome
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  vibration: ^1.7.5
+  intl: ^0.19.0
+  firebase_core: ^3.0.0
+  firebase_auth: ^5.0.0
+  firebase_database: ^11.0.0
+  firebase_messaging: ^15.1.0
+  onesignal_flutter: ^5.2.3
+  fl_chart: ^0.69.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  audioplayers: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/Sounds/
+    - assets/icon/App_logo.webp
+    - assets/images/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/App_logo.webp"
+

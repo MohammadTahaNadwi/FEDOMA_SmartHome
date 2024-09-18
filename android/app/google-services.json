@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326864355809",
+    "project_id": "fedoma-smarthome",
+    "storage_bucket": "fedoma-smarthome.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326864355809:android:e6720c9f40faf78c1612a0",
+        "android_client_info": {
+          "package_name": "com.example.smarthome"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1nQQzIiJ77tQYOz15iXJKtd0PdXubo24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
