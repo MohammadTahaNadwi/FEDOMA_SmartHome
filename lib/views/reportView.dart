@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as PDF;
+
 import 'dart:developer' as devtools show log;
 
 import 'package:smarthome/views/pop_up_screens.dart';
+import 'package:smarthome/views/simplePdfApi.dart';
 
 class reportView extends StatefulWidget {
   final String reportName;
-
   const reportView({super.key, required this.reportName});
 
   @override
@@ -57,9 +63,11 @@ class _reportViewState extends State<reportView> {
                             ],
                             enableFilter: true,
                             enableSearch: true,
-                            onSelected: (value) {
+                            onSelected: (value) async {
                               reportMonth = value.toString();
-
+                              final simplePDFFile = await Simplepdfapi()
+                                  .generateSimpleTextPdf(rName);
+                              openFile(simplePDFFile);
                               Navigator.pop(context);
                             },
                           ),
@@ -205,6 +213,7 @@ class _reportViewState extends State<reportView> {
           FutureBuilder(
               future: getData(rName),
               builder: (context, snapshot) {
+                Map answer = {};
                 if (snapshot.connectionState == ConnectionState.none) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.connectionState ==
@@ -212,26 +221,82 @@ class _reportViewState extends State<reportView> {
                   return const CircularProgressIndicator();
                 } else if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
-                  Map data = snapshot.data!;
-                  for (int month = 1; month < 13; month++) {
-                    for (int len = 0; len < data.length; len++) {}
+                  Iterable data = snapshot.data!.values;
+                  final tableHeader2;
+                  if (answer.keys.length < 3) {
+                    tableHeader2 = "Record number";
+                  } else {
+                    tableHeader2 = answer.keys.elementAt(2).toString();
                   }
 
-                  return Text("");
+                  for (int len = 0; len < data.length; len++) {
+                    answer = data.elementAt(len);
+                    if (reportMonth != "") {
+                      if (answer["Date"].toString().substring(3, 5) ==
+                          reportMonth) {
+                        devtools.log(answer.toString());
+                        devtools.log(answer.values.elementAt(0).toString());
+                        devtools.log(answer.length.toString());
+                      }
+                    }
+                  }
+
+                  return Table(
+                    border: TableBorder.all(color: Colors.black),
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: [
+                      TableRow(
+                          decoration: BoxDecoration(color: Colors.green),
+                          children: [
+                            TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(tableHeader2)),
+                            TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child:
+                                    Text(answer.keys.elementAt(0).toString())),
+                            TableCell(
+                                verticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                child: Text(
+                                    answer.values.elementAt(1).toString())),
+                          ]),
+                    ],
+                  );
                 } else {
                   return Text("No Data Found");
                 }
-              })
+              }),
         ],
       ),
     );
   }
 
-  Future getData(rName) async {
+  Future<Map<dynamic, dynamic>> getData(rName) async {
     var dataName = FirebaseDatabase.instance.ref().child(rName);
     DataSnapshot snapshot = await dataName.get();
     Map<dynamic, dynamic> result = snapshot.value as Map<dynamic, dynamic>;
     return result;
+  }
+
+  Future<File> savePdf(
+      {required String name, required PDF.Document pdf}) async {
+    final root = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    DateTime timestamp = DateTime.timestamp();
+    String name = "$rName-$timestamp";
+    final file = File('${root!.path}/$name');
+    await file.writeAsBytes(await pdf.save());
+    debugPrint('${root.path}/$name');
+    return file;
+  }
+
+  Future<void> openFile(File file) async {
+    final path = file.path;
+    await OpenFile.open(path);
   }
 }
 
