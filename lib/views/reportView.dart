@@ -66,7 +66,8 @@ class _reportViewState extends State<reportView> {
                             onSelected: (value) async {
                               reportMonth = value.toString();
                               final simplePDFFile = await Simplepdfapi()
-                                  .generateSimpleTextPdf(rName);
+                                  .generateSimpleTextPdf(
+                                      rName, value.toString());
                               openFile(simplePDFFile);
                               Navigator.pop(context);
                             },

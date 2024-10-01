@@ -8,33 +8,42 @@ import 'package:smarthome/views/reportView.dart';
 import 'package:smarthome/views/savePDF.dart';
 
 class Simplepdfapi {
-  Future<File> generateSimpleTextPdf(String rName) async {
+  Future<File> generateSimpleTextPdf(String rName, String value) async {
     final pdf = Document();
     var dataName = FirebaseDatabase.instance.ref().child(rName);
     DataSnapshot snapshot = await dataName.get();
     Map<dynamic, dynamic> result = snapshot.value as Map<dynamic, dynamic>;
-    Iterable lissst = result.values!;
+    Iterable lissst = result.values;
 
     List<List<dynamic>> data = [];
-    for (int i = 0; i < result.length; i++) {
-      // data.add( TableRow(children: [Text(lissst.elementAt(i)["Date"]),Text(lissst.elementAt(i)["Time"])]));
-      data.add([
-        lissst.elementAt(i)["Date"], // Add Date
-        lissst.elementAt(i)["Time"] // Add Time
-      ]); // Add Time
-    }
     final tableHeader2;
-    if (result.keys.length < 3) {
+    if (lissst.elementAt(0).length < 3) {
       tableHeader2 = "Record number";
     } else {
-      tableHeader2 = result.keys.elementAt(2).toString();
+      tableHeader2 = "Room";
+    }
+    int recordNumbers = 1;
+    for (int i = 0; i < result.length; i++) {
+      // data.add( TableRow(children: [Text(lissst.elementAt(i)["Date"]),Text(lissst.elementAt(i)["Time"])]));
+      if (lissst.elementAt(i)["Date"].toString().substring(3, 5) == value) {
+        if (tableHeader2 == "Record number") {
+          data.add([
+            recordNumbers,
+            lissst.elementAt(i)["Date"], // Add Date
+            lissst.elementAt(i)["Time"] // Add Time
+          ]);
+          recordNumbers++;
+        } else {
+          data.add([
+            lissst.elementAt(i)["Room"],
+            lissst.elementAt(i)["Date"], // Add Date
+            lissst.elementAt(i)["Time"] // Add Time
+          ]); // Add Time
+        }
+      }
     }
 
-    final headers = [
-      tableHeader2,
-      Text(result.keys.elementAt(0).toString()),
-      Text(result.keys.elementAt(1).toString())
-    ];
+    final headers = [tableHeader2, "Date", "Time"];
 
     // pdf.addPage(Page(
     //     build: (_) => Center(
