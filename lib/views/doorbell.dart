@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smarthome/api/firebaseAPI.dart';
+
+import 'dart:developer' as devtools show log;
 
 class Doorbell extends StatefulWidget {
   const Doorbell({super.key});
@@ -12,6 +15,8 @@ class Doorbell extends StatefulWidget {
 
 class _DoorbellState extends State<Doorbell> {
   String timeNow = DateFormat("dd-MM-yyyy HH:mm:ss").format(DateTime.now());
+  String? doorbellURL;
+
   late StreamSubscription _doorbellListening;
   Map<String, String> doorbellPress = {};
   @override
@@ -49,11 +54,8 @@ class _DoorbellState extends State<Doorbell> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                child: Image.asset(
-                  "assets/images/human-icon.webp",
-                  width: 200,
-                ),
-              ),
+                  child: Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/fedoma-smarthome.firebasestorage.app/o/data%2Fphoto.jpg?alt=media&token=dcc39f6d-ccae-4fe9-ae9a-8959e8278f09")),
               Text("Time:  ${doorbellPress["Time"].toString()}"),
               Text("Date: ${doorbellPress["Date"].toString()}"),
             ],
@@ -63,8 +65,13 @@ class _DoorbellState extends State<Doorbell> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     super.deactivate();
     _doorbellListening.cancel();
   }
+
+  // Future getDoorbellImage() async {
+  //   final ref = FirebaseStorage.instance.ref().child('/data/photo.jpg');
+  //   var url = await ref.getDownloadURL();
+  //   devtools.log(url);
+  // }
 }

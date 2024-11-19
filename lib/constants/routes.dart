@@ -6,6 +6,7 @@ const helpPageRoute = '/helpPage/';
 const reportsRoute = '/reports/';
 const reportViewRoute = '/reportView/';
 const intrusionsRoute = '/intrusions/';
+const settingsRoute = '/settings/';
 
 //Rooms
 const roomPageRoute = '/universalRoom/';

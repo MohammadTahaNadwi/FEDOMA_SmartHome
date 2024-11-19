@@ -69,6 +69,13 @@ class _NavBarState extends State<NavBar> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.of(context).pushNamed(settingsRoute);
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.help),
             title: const Text('Help'),
             onTap: () {

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:smarthome/api/firebaseAPI.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/firebase_options.dart';
@@ -12,10 +13,16 @@ import 'package:smarthome/views/reports.dart';
 import 'package:smarthome/views/doorbell.dart';
 import 'package:smarthome/views/helpPage.dart';
 import 'package:smarthome/views/homePage.dart';
+import 'package:smarthome/views/settings.dart';
 import 'package:smarthome/views/splashView.dart';
 import 'package:smarthome/views/universal_room.dart';
 
 void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Initialize Firebase only once in the main function
+  await Firebase.initializeApp();
+  await FirebaseAPI().initPushNotifications();
+
   runApp(
     MaterialApp(
       home: const SplashView(),
@@ -35,7 +42,8 @@ void main() async {
         intrusionsRoute: (context) => const Intrusions(),
         reportViewRoute: (context) => reportView(
               reportName: ModalRoute.of(context)!.settings.arguments as String,
-            )
+            ),
+        settingsRoute: (context) => const Settings(),
       },
     ),
   );
@@ -46,25 +54,31 @@ class InitializeSmarthome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use StreamBuilder instead of FutureBuilder
     return Scaffold(
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            final user = FirebaseAuth.instance.currentUser;
-            if (user != null) {
-              if (user.emailVerified) {
-                return const HomePage();
-              } else {
-                return const EmailVerifier();
-              }
+          // Waiting for stream data
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Handle stream error
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          // If there's no user, navigate to the login screen
+          final user = snapshot.data;
+          if (user != null) {
+            if (user.emailVerified) {
+              return const HomePage();
             } else {
-              return const LoginView();
+              return const EmailVerifier();
             }
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const LoginView();
           }
         },
       ),

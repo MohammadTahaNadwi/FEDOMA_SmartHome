@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:smarthome/api/firebaseAPI.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
+
+import 'dart:developer' as devtools show log;
 import 'package:smarthome/views/navbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -110,6 +113,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void deactivate() {
     _roomListener.cancel();
+
     super.deactivate();
   }
 }

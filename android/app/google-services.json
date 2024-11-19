@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "326864355809",
+    "firebase_url": "https://fedoma-smarthome-default-rtdb.firebaseio.com",
     "project_id": "fedoma-smarthome",
-    "storage_bucket": "fedoma-smarthome.appspot.com"
+    "storage_bucket": "fedoma-smarthome.firebasestorage.app"
   },
   "client": [
     {

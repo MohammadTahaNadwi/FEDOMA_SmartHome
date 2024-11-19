@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:smarthome/constants/routes.dart';
 import 'package:smarthome/views/pop_up_screens.dart';
 
 class UniversalRoom extends StatefulWidget {
@@ -17,13 +18,14 @@ class _UniversalRoomState extends State<UniversalRoom> {
   late final roomDetailsRef = FirebaseDatabase.instance.ref();
   List roomDetails = [];
   List roomActionValues = [];
+  List roomControlValues = [];
   bool isLoaded = false;
   late StreamSubscription roomDetailsListener;
 
   @override
   void initState() {
+    super.initState();
     try {
-      super.initState();
       runRoomListener();
     } catch (e) {
       showErrorDialog(context, e.toString());
@@ -36,14 +38,18 @@ class _UniversalRoomState extends State<UniversalRoom> {
           roomDetailsRef.child(roomPath).onValue.listen((event) {
         List temp = [];
         List tempRoomActionValues = [];
+        List tempRoomControlValues = [];
+
         for (var element in event.snapshot.children) {
           temp.add(element.key.toString());
-          tempRoomActionValues.add(element.value.toString());
+          tempRoomActionValues.add(element.child("Status").value.toString());
+          tempRoomControlValues.add(element.child("Control").value.toString());
         }
 
         setState(() {
           roomDetails = temp;
           roomActionValues = tempRoomActionValues;
+          roomControlValues = tempRoomControlValues;
           isLoaded = true;
         });
       });
@@ -60,6 +66,11 @@ class _UniversalRoomState extends State<UniversalRoom> {
         foregroundColor: Colors.white,
         title: Text(widget.roomName),
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(settingsRoute);
+              },
+              icon: Icon(Icons.settings)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.help)),
         ],
       ),
@@ -67,18 +78,29 @@ class _UniversalRoomState extends State<UniversalRoom> {
           ? ListView.builder(
               itemCount: roomDetails.length,
               itemBuilder: (context, index) {
+                final isSensorMode = roomControlValues[index] == "Sensor";
+                final isLight = roomDetails[index].toLowerCase() == "lights";
+
+                // Adjust status text for lights
+                final statusText = isLight
+                    ? (roomActionValues[index] == "On" ? "On" : "Off")
+                    : roomActionValues[index];
+
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ListTile(
                     title: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: roomActionValues[index] == "Open"
-                            ? Colors.green
-                            : Colors.red,
+                        color: _getBackgroundColor(
+                          index,
+                          isSensorMode,
+                          isLight,
+                        ),
                       ),
-                      child: Column(children: [
-                        Row(
+                      child: Column(
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
@@ -87,57 +109,83 @@ class _UniversalRoomState extends State<UniversalRoom> {
                                 style: const TextStyle(
                                     fontSize: 24, color: Colors.white),
                               ),
-                            ]),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "Status: " + roomActionValues[index],
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.white),
-                            ),
-                          ],
-                        ),
-                        roomActionValues[index] == "Open"
-                            ? const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "Tap to Close",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
-                                  )
-                                ],
-                              )
-                            : const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "Tap to Open",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
-                                  )
-                                ],
-                              )
-                      ]),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                "Status: $statusText",
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                isSensorMode
+                                    ? "Sensor mode enabled"
+                                    : roomActionValues[index] == "On"
+                                        ? (isLight
+                                            ? "Tap to Turn Off"
+                                            : "Tap to Close")
+                                        : (isLight
+                                            ? "Tap to Turn On"
+                                            : "Tap to Open"),
+                                style: const TextStyle(
+                                    color: Colors.grey, fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    onTap: () {
-                      late final currentAction = FirebaseDatabase.instance
-                          .ref("$roomPath/" + roomDetails[index]);
-                      if (roomActionValues[index] == "Open") {
-                        currentAction.set("Closed");
-                      } else {
-                        currentAction.set("Open");
-                      }
-                    },
+                    // Disable onTap if Control is "Sensor"
+                    onTap: isSensorMode
+                        ? null
+                        : () {
+                            _toggleAction(index, isLight);
+                          },
                   ),
                 );
               },
             )
           : const Center(child: CircularProgressIndicator()),
     );
+  }
+
+  Color _getBackgroundColor(int index, bool isSensorMode, bool isLight) {
+    if (isSensorMode) {
+      return Colors.grey.shade400; // Grey for Sensor mode
+    }
+    if (isLight) {
+      return roomActionValues[index] == "On" ? Colors.green : Colors.red;
+    } else {
+      return roomActionValues[index] == "Open" ? Colors.green : Colors.red;
+    }
+  }
+
+  void _toggleAction(int index, bool isLight) {
+    final currentAction =
+        FirebaseDatabase.instance.ref("$roomPath/${roomDetails[index]}");
+
+    if (isLight) {
+      // For lights, update to On/Off status
+      if (roomActionValues[index] == "On") {
+        currentAction.child("Status").set("Off"); // Turn light off
+      } else {
+        currentAction.child("Status").set("On"); // Turn light on
+      }
+    } else {
+      // For other appliances, update Open/Closed status
+      if (roomActionValues[index] == "Open") {
+        currentAction.child("Status").set("Closed");
+      } else {
+        currentAction.child("Status").set("Open");
+      }
+    }
   }
 
   @override
