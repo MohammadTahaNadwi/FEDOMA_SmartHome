@@ -71,7 +71,9 @@ class _UniversalRoomState extends State<UniversalRoom> {
                 Navigator.of(context).pushNamed(settingsRoute);
               },
               icon: const Icon(Icons.settings)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.help)),
+          HelpButton(
+              helpText:
+                  "Tap an element to turn On/Open or Off/Close a corresponding element in your smart home. Green means On/Open and red means Off/Closed."),
         ],
       ),
       body: isLoaded

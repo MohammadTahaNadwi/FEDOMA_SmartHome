@@ -47,7 +47,17 @@ class HelpPage extends StatelessWidget {
             ],
           ),
           buildManualSection(
-            title: '4. Reports Page',
+            title: '4. Settings Page',
+            steps: [
+              'Navigate to the "Settings Page" to manage control modes for each element in all rooms.',
+              'Each room will have toggle options for elements like lights, doors, and curtains.',
+              'Switch between "Mobile Control" and "Sensor Control" for any selected element.',
+              'The changes will be updated in real-time and saved to the database for effective control management.',
+              'Tap a button once to make alter any control',
+            ],
+          ),
+          buildManualSection(
+            title: '5. Reports Page',
             steps: [
               'Access reports for Doorbell and Intrusion records.',
               'Tap the "Doorbell Report" or "Intrusion Report" button to view a graph of monthly records for the entire year.',

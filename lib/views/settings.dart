@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:smarthome/views/pop_up_screens.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -18,6 +19,11 @@ class _SettingsState extends State<Settings> {
         backgroundColor: const Color.fromRGBO(10, 29, 77, 1),
         foregroundColor: Colors.white,
         title: const Text("Settings"),
+        actions: [
+          HelpButton(
+              helpText:
+                  "Tap a button to change from Mobile control to Sensor control or vice versa to change control for the respective element")
+        ],
       ),
       body: FutureBuilder(
         future: database.child("/Rooms").get(),
@@ -99,10 +105,6 @@ class _SettingsState extends State<Settings> {
       setState(() {
         // Force UI rebuild to reflect the updated value
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("$featureName updated to $newControl")),
-      );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error updating $featureName: $error")),

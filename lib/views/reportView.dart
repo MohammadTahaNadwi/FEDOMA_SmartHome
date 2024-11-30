@@ -213,8 +213,8 @@ class _ReportViewState extends State<ReportView> {
 }
 
 Widget getBottomTiles(double value, TitleMeta meta) {
-  const style = TextStyle(
-      color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 13);
+  const style =
+      TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13);
   final months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
   return SideTitleWidget(
     axisSide: meta.axisSide,
