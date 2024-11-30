@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:smarthome/api/firebaseAPI.dart';
 import 'package:smarthome/constants/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:smarthome/firebase_options.dart';
 import 'package:smarthome/user/emailVerifier.dart';
 import 'package:smarthome/user/login.dart';
 import 'package:smarthome/user/register.dart';
@@ -40,7 +39,7 @@ void main() async {
         registerRoute: (context) => const RegisterView(),
         verifyEmailRoute: (context) => const EmailVerifier(),
         intrusionsRoute: (context) => const Intrusions(),
-        reportViewRoute: (context) => reportView(
+        reportViewRoute: (context) => ReportView(
               reportName: ModalRoute.of(context)!.settings.arguments as String,
             ),
         settingsRoute: (context) => const Settings(),

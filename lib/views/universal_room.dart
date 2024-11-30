@@ -70,7 +70,7 @@ class _UniversalRoomState extends State<UniversalRoom> {
               onPressed: () {
                 Navigator.of(context).pushNamed(settingsRoute);
               },
-              icon: Icon(Icons.settings)),
+              icon: const Icon(Icons.settings)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.help)),
         ],
       ),

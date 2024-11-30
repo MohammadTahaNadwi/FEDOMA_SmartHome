@@ -16,7 +16,7 @@ class Simplepdfapi {
     Iterable lissst = result.values;
 
     List<List<dynamic>> data = [];
-    final tableHeader2;
+    final String tableHeader2;
     if (lissst.elementAt(0).length < 3) {
       tableHeader2 = "Record number";
     } else {
@@ -24,7 +24,6 @@ class Simplepdfapi {
     }
     int recordNumbers = 1;
     for (int i = 0; i < result.length; i++) {
-      // data.add( TableRow(children: [Text(lissst.elementAt(i)["Date"]),Text(lissst.elementAt(i)["Time"])]));
       if (lissst.elementAt(i)["Date"].toString().substring(3, 5) == value) {
         if (tableHeader2 == "Record number") {
           data.add([
@@ -44,17 +43,6 @@ class Simplepdfapi {
     }
 
     final headers = [tableHeader2, "Date", "Time"];
-
-    // pdf.addPage(Page(
-    //     build: (_) => Center(
-    //             child: Table(children: [
-    //           TableRow(children: [
-    //             Column(children: [Text(tableHeader2)]),
-    //             Column(children: [Text(result.keys.elementAt(0).toString())]),
-    //             Column(children: [Text(result.keys.elementAt(1).toString())])
-    //           ]),
-
-    //         ]))));
 
     pdf.addPage(Page(
         build: (_) => Center(

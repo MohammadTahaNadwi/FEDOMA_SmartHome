@@ -64,8 +64,8 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: const Icon(Icons.analytics),
             title: const Text('Reports'),
-            onTap: () async {
-              await analyticsViewAuthentication(context);
+            onTap: () {
+              Navigator.of(context).pushNamed(reportsRoute);
             },
           ),
           ListTile(

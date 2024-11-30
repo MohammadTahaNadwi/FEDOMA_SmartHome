@@ -72,7 +72,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ],
                       );
-                    }).toList(),
+                    }),
                   ],
                 );
               }).toList(),

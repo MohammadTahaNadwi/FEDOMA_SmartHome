@@ -24,9 +24,9 @@ class Reports extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),
-            leading: Icon(Icons.broken_image),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
-            subtitle: Text(
+            leading: const Icon(Icons.broken_image),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
+            subtitle: const Text(
               "View statistical report for intrusions",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),
@@ -37,14 +37,14 @@ class Reports extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.doorbell),
+            leading: const Icon(Icons.doorbell),
             title: const Text(
               "Doorbell Interactions",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
-            subtitle: Text(
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
+            subtitle: const Text(
               "View statistical report for doorbell interactions",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),

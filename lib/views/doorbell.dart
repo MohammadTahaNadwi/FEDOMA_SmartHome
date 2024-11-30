@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smarthome/api/firebaseAPI.dart';
-
-import 'dart:developer' as devtools show log;
 
 class Doorbell extends StatefulWidget {
   const Doorbell({super.key});

@@ -1,5 +1,3 @@
-import 'package:smarthome/constants/routes.dart';
-import 'package:smarthome/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:developer' as devtools show log;
